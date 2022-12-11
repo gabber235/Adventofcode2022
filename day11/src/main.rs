@@ -182,7 +182,7 @@ impl FromStr for Operand {
 #[derive(Debug, Eq, PartialEq)]
 enum Context {
     StressFree,
-    Stressed { total: u64 },
+    Stressed { super_modulo: u64 },
 }
 
 struct Inspection {
@@ -193,7 +193,9 @@ struct Inspection {
 fn simplify_item(context: &Context, item: u64) -> u64 {
     match context {
         StressFree => item / 3,
-        Stressed { total } => item % total,
+        Stressed {
+            super_modulo: total,
+        } => item % total,
     }
 }
 
@@ -262,7 +264,7 @@ fn process_part2(text: String) -> u64 {
         .collect();
 
     let context = Stressed {
-        total: monkeys.iter().map(|m| m.test).product(),
+        super_modulo: monkeys.iter().map(|m| m.test).product(),
     };
 
     for _ in 0..10000 {
